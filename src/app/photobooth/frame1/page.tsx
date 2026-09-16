@@ -717,14 +717,14 @@ export default function Frame2Photobooth() {
 
                         {/* RESULT */}
 
-                        <div className="min-h-[500px] flex items-center justify-center bg-[#F4EEFB] rounded-2xl p-5">
+                        <div className="min-h-125 flex items-center justify-center bg-[#F4EEFB] rounded-2xl p-5">
 
                             {resultUrl ? (
 
                                 <img
                                     src={resultUrl}
                                     alt="Hasil Photobooth"
-                                    className="max-h-[620px] w-auto max-w-full rounded-xl shadow-lg"
+                                    className="max-h-155 w-auto max-w-full rounded-xl shadow-lg"
                                 />
 
                             ) : (
