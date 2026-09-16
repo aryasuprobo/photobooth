@@ -10,53 +10,53 @@ import { useRouter } from "next/navigation";
 const frames = [
   {
     id: 1,
-    name: "Purple Pastel",
+    name: "psylla 1",
     type: "4 Photo Strip",
     image: "/frame/frame1.png",
     slug: "frame1",
   },
   {
     id: 2,
-    name: "Lavender",
+    name: "psylla 2",
     type: "4 Photo Strip",
     image: "/frame/frame2.png",
     slug: "frame2",
   },
   {
     id: 3,
-    name: "Sakura",
+    name: "psylla 3",
     type: "4 Photo Strip",
     image: "/frame/frame3.png",
     slug: "frame3",
   },
   {
     id: 4,
-    name: "Frame 4",
+    name: "psylla 4",
     type: "4 Photo Strip",
     image: "/frame/frame4.png",
     slug: "frame4",
   },
   {
     id: 5,
-    name: "Frame 5",
+    name: "psylla 5",
     type: "4 Photo Strip",
     image: "/frame/frame5.png",
     slug: "frame5",
   },
   {
     id: 6,
-    name: "Frame 6",
+    name: "psylla 6",
     type: "4 Photo Strip",
     image: "/frame/frame6.png",
     slug: "frame6",
   },
-  {
-    id: 7,
-    name: "Frame 7",
-    type: "4 Photo Strip",
-    image: "/frame/frame7.png",
-    slug: "frame7",
-  }
+  // {
+  //   id: 7,
+  //   name: "psylla 7",
+  //   type: "4 Photo Strip",
+  //   image: "/frame/frame7.png",
+  //   slug: "frame7",
+  // }
 ];
 
 export default function Home() {

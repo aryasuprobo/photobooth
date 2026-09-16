@@ -16,7 +16,7 @@ export type FrameConfig = {
 
 export const FRAME_CONFIG: Record<string, FrameConfig> = {
     frame1: {
-        name: "Purple Pastel",
+        name: "psylla 1",
         frameSrc: "/frame/frame1.png",
         width: 1024,
         height: 1536,
@@ -29,7 +29,7 @@ export const FRAME_CONFIG: Record<string, FrameConfig> = {
     },
 
     frame2: {
-        name: "Lavender",
+        name: "psylla 2",
         frameSrc: "/frame/frame2.png",
         width: 1024,
         height: 1536,
@@ -45,7 +45,7 @@ export const FRAME_CONFIG: Record<string, FrameConfig> = {
     },
 
     frame3: {
-        name: "Sakura",
+        name: "psylla 3",
         frameSrc: "/frame/frame3.png",
         width: 533,
         height: 1600,
@@ -57,7 +57,7 @@ export const FRAME_CONFIG: Record<string, FrameConfig> = {
     },
 
     frame4: {
-        name: "Frame 4",
+        name: "psylla 4",
         frameSrc: "/frame/frame4.png",
         width: 600,
         height: 1800,
@@ -69,6 +69,33 @@ export const FRAME_CONFIG: Record<string, FrameConfig> = {
 
         ],
     },
+    frame5: {
+        name: "psylla 5",
+        frameSrc: "/frame/frame5.png",
+        width: 533,
+        height: 1600,
+        slots: [
+            { x: 92, y: 257, w: 353, h: 250, },
+            { x: 92, y: 519, w: 353, h: 251, },
+            { x: 92, y: 782, w: 353, h: 250, },
+            { x: 92, y: 1045, w: 353, h: 251, },
+
+        ],
+    },
+
+    frame6: {
+        name: "psylla 6",
+        frameSrc: "/frame/frame6.png",
+        width: 533,
+        height: 1600,
+        slots: [
+            { x: 89, y: 265, w: 351, h: 373, },
+            { x: 89, y: 656, w: 351, h: 371, },
+            { x: 89, y: 1045, w: 351, h: 343, },
+
+        ],
+    },
+
 
     // frame4 - frame7 tinggal tambahkan
 };
