@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Web Photo Psikologi UMB",
   description: "psikologi UMB",
+  icons: {
+    icon: '/kupu.png',
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

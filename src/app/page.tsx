@@ -20,21 +20,21 @@ const frames = [
     name: "Nama frame",
     type: "",
     image: "/frame2.png",
-    ref: "/photobooth/frame2",
+    ref: "/photobooth/frame1",
   },
   {
     id: 3,
     name: "Nama frame",
     type: "",
     image: "/frame2.png",
-    ref: "/photobooth/frame3",
+    ref: "/photobooth/frame1",
   },
   {
     id: 4,
     name: "Nama frame",
     type: "",
     image: "/frame2.png",
-    ref: "/photobooth/frame4",
+    ref: "/photobooth/frame1",
   },
 ];
 
