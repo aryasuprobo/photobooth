@@ -4,41 +4,63 @@ import Footer from "@/app/components/footer";
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-// Data dummy untuk pilihan frame photobooth
+
 const frames = [
   {
     id: 1,
-    name: "Nama frame",
-    type: "",
-    image: "/frame2.png",
-    ref: "/photobooth/frame1",
-
+    name: "Purple Pastel",
+    type: "4 Photo Strip",
+    image: "/frame/frame1.png",
+    slug: "frame1",
   },
   {
     id: 2,
-    name: "Nama frame",
-    type: "",
-    image: "/frame2.png",
-    ref: "/photobooth/frame1",
+    name: "Lavender",
+    type: "4 Photo Strip",
+    image: "/frame/frame2.png",
+    slug: "frame2",
   },
   {
     id: 3,
-    name: "Nama frame",
-    type: "",
-    image: "/frame2.png",
-    ref: "/photobooth/frame1",
+    name: "Sakura",
+    type: "4 Photo Strip",
+    image: "/frame/frame3.png",
+    slug: "frame3",
   },
   {
     id: 4,
-    name: "Nama frame",
-    type: "",
-    image: "/frame2.png",
-    ref: "/photobooth/frame1",
+    name: "Frame 4",
+    type: "4 Photo Strip",
+    image: "/frame/frame4.png",
+    slug: "frame4",
   },
+  {
+    id: 5,
+    name: "Frame 5",
+    type: "4 Photo Strip",
+    image: "/frame/frame5.png",
+    slug: "frame5",
+  },
+  {
+    id: 6,
+    name: "Frame 6",
+    type: "4 Photo Strip",
+    image: "/frame/frame6.png",
+    slug: "frame6",
+  },
+  {
+    id: 7,
+    name: "Frame 7",
+    type: "4 Photo Strip",
+    image: "/frame/frame7.png",
+    slug: "frame7",
+  }
 ];
 
 export default function Home() {
+  const router = useRouter();
   const [selectedFrame, setSelectedFrame] = useState<number | null>(null);
   return (
     <main className="relative bg-[#F4EEFB] min-h-screen text-[#1F1133]">
@@ -122,8 +144,8 @@ export default function Home() {
 
                   {/* Tombol Pilih */}
                   <button
-                    onClick={() => window.location.href = frame.ref}
-                    className="w-full cursor-pointer mt-4 py-2.5 rounded-xl font-bold text-xs transition-all duration-200 bg-[#F4EEFB] text-[#3E2463] hover:bg-[#6B3AA8] hover:text-white"
+                    onClick={() => router.push(`/foto/${frame.slug}`)}
+                    className="w-full mt-4 py-2.5 rounded-xl font-bold text-xs bg-[#F4EEFB] text-[#3E2463] hover:bg-[#6B3AA8] hover:text-white transition"
                   >
                     Pilih Frame
                   </button>

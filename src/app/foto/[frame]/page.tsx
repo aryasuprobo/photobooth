@@ -1,8 +1,7 @@
-
 "use client";
 
 import Footer from "@/app/components/footer";
-import { useRef, useState, useEffect } from "react";
+import { use, useRef, useState, useEffect } from "react";
 import {
     Camera,
     Download,
@@ -11,48 +10,40 @@ import {
     Check,
 } from "lucide-react";
 import Link from "next/link";
+import { FRAME_CONFIG } from "../frameConfig";
+import { notFound } from "next/navigation";
 
-const FRAME_SRC = "/frame2.png";
+export default function PhotoPage({
+    params,
+}: {
+    params: Promise<{ frame: string }>;
+}) {
+    const { frame } = use(params);
 
-// =====================================================
-// KONFIGURASI FRAME 2
-// =====================================================
+    const config = FRAME_CONFIG[frame];
 
-const CANVAS_WIDTH = 600;
-const CANVAS_HEIGHT = 1800;
+    if (!config) return notFound();
 
-const SLOTS = [
-    { x: 58, y: 175, w: 484, h: 320 },
-    { x: 58, y: 554, w: 484, h: 320 },
-    { x: 58, y: 930, w: 484, h: 320 },
-    { x: 58, y: 1305, w: 484, h: 320 },
-];
+    const FRAME_SRC = config.frameSrc;
+    const SLOTS = config.slots;
+    const CANVAS_WIDTH = config.width;
+    const CANVAS_HEIGHT = config.height;
+    const TOTAL_PHOTOS = SLOTS.length;
 
-const TOTAL_PHOTOS = SLOTS.length;
-
-// ======================================================
-// COMPONENT
-// ======================================================
-
-export default function Frame2Photobooth() {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const streamRef = useRef<MediaStream | null>(null);
 
-    // Setiap index = satu slot foto
-    // null = slot belum memiliki foto
     const [photos, setPhotos] = useState<(string | null)[]>(
         Array(TOTAL_PHOTOS).fill(null)
     );
 
-    // Slot foto yang sedang aktif untuk diambil
     const [activeSlot, setActiveSlot] = useState(0);
-
-    // Hasil frame
     const [resultUrl, setResultUrl] = useState<string | null>(null);
-
     const [cameraReady, setCameraReady] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
+
+
 
     // ==================================================
     // START CAMERA
@@ -72,6 +63,8 @@ export default function Frame2Photobooth() {
                 await navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: "user",
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
                     },
                     audio: false,
                 });
@@ -265,7 +258,8 @@ export default function Frame2Photobooth() {
                 slot.x,
                 slot.y,
                 slot.w,
-                slot.h
+                slot.h,
+                slot.rotate ?? 0
             );
         }
 
@@ -302,37 +296,34 @@ export default function Frame2Photobooth() {
         x: number,
         y: number,
         w: number,
-        h: number
+        h: number,
+        rotate = 0
     ) {
-        const imgRatio =
-            img.width / img.height;
-
+        const imgRatio = img.width / img.height;
         const boxRatio = w / h;
 
-        let sx: number;
-        let sy: number;
-        let sw: number;
-        let sh: number;
+        let sx = 0,
+            sy = 0,
+            sw = img.width,
+            sh = img.height;
 
         if (imgRatio > boxRatio) {
             sh = img.height;
-
             sw = sh * boxRatio;
-
-            sx =
-                (img.width - sw) / 2;
-
-            sy = 0;
+            sx = (img.width - sw) / 2;
         } else {
             sw = img.width;
-
             sh = sw / boxRatio;
-
-            sx = 0;
-
-            sy =
-                (img.height - sh) / 2;
+            sy = (img.height - sh) / 2;
         }
+
+        ctx.save();
+
+        // titik tengah slot
+        ctx.translate(x + w / 2, y + h / 2);
+
+        // rotasi (derajat → radian)
+        ctx.rotate((rotate * Math.PI) / 180);
 
         ctx.drawImage(
             img,
@@ -340,11 +331,13 @@ export default function Frame2Photobooth() {
             sy,
             sw,
             sh,
-            x,
-            y,
+            -w / 2,
+            -h / 2,
             w,
             h
         );
+
+        ctx.restore();
     }
 
     // ==================================================
@@ -422,8 +415,7 @@ export default function Frame2Photobooth() {
 
         link.href = resultUrl;
 
-        link.download =
-            "photobooth-frame2.png";
+        link.download = `photobooth-${frame}.png`;
 
         link.click();
     }
@@ -450,8 +442,8 @@ export default function Frame2Photobooth() {
                 HEADER
             ================================================== */}
 
-            <header className="w-full bg-white border-b border-2 border-[#3E2463] relative z-10 shadow-xs">
-                <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-4">
+            <header className="w-full bg-white border-b-2 md:border-b border-[#3E2463] relative z-10 shadow-xs">
+                <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-3">
                     <div className="flex items-center justify-between">
                         <Link
                             href="/"
@@ -464,11 +456,9 @@ export default function Frame2Photobooth() {
                         </Link>
 
                         <div className="text-right">
-                            <span className="inline-block text-[10px] uppercase tracking-widest font-bold bg-linear-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent mb-0.5">
-                                Template
-                            </span>
+
                             <h1 className="text-sm font-extrabold text-slate-800 tracking-tight">
-                                Purple Pastel Grid
+                                {config.name}
                             </h1>
                         </div>
                     </div>
@@ -479,7 +469,7 @@ export default function Frame2Photobooth() {
                 TITLE
             ================================================== */}
 
-            <section className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-8 pb-10 relative z-10">
+            <section className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-3 pb-10 relative z-10">
 
                 {/* ==================================================
                     DESKTOP:
@@ -492,9 +482,9 @@ export default function Frame2Photobooth() {
                         CAMERA CARD
                     ================================================== */}
 
-                    <div className="bg-white rounded-3xl shadow-xl border border-purple-100 p-5 sm:p-7">
+                    <div className="bg-white rounded-3xl shadow-xl border border-purple-100 p-5 sm:p-5">
 
-                        <div className="flex items-center justify-between mb-5">
+                        <div className="flex items-center justify-between mb-2">
 
                             <div>
 
@@ -517,7 +507,7 @@ export default function Frame2Photobooth() {
 
                         {/* CAMERA */}
 
-                        <div className="relative w-full h-80 overflow-hidden rounded-2xl bg-[#1F1133] aspect-video">
+                        <div className="relative w-full h-50 md:h-80 overflow-hidden rounded-2xl bg-[#1F1133] aspect-video">
 
                             <video
                                 ref={videoRef}
@@ -552,7 +542,7 @@ export default function Frame2Photobooth() {
 
                         {/* PROGRESS */}
 
-                        <div className="mt-5">
+                        <div className="mt-2">
 
                             <div className="flex justify-between mb-2">
 
@@ -685,9 +675,9 @@ export default function Frame2Photobooth() {
                         RESULT CARD
                     ================================================== */}
 
-                    <div className="bg-white rounded-3xl shadow-xl border border-purple-100 p-5 sm:p-7">
+                    <div className="bg-white rounded-3xl shadow-xl border border-purple-100 p-5 sm:p-5">
 
-                        <div className="flex items-center justify-between mb-5">
+                        <div className="flex items-center justify-between mb-2">
 
                             <div>
 
