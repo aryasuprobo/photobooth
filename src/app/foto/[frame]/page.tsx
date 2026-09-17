@@ -478,252 +478,261 @@ export default function PhotoPage({
                         CAMERA CARD
                     ================================================== */}
 
-                    <div className="bg-white rounded-3xl shadow-xl border border-purple-100 p-3 sm:p-5">
+                    <div className="">
 
-                        <div className="flex items-center justify-between mb-2">
 
-                            <div>
+                        <div className="bg-white rounded-3xl shadow-xl border border-purple-100 p-3 sm:p-5">
 
-                                <h2 className="font-extrabold text-[#3E2463]">
-                                    Kamera
-                                </h2>
+                            <div className="flex items-center justify-between mb-2">
 
-                                <p className="text-xs text-purple-900/50 mt-1">
-                                    Foto {activeSlot + 1} dari{" "}
-                                    {TOTAL_PHOTOS}
-                                </p>
+                                <div>
 
-                            </div>
+                                    <h2 className="font-extrabold text-[#3E2463]">
+                                        Kamera
+                                    </h2>
 
-                            <div className="px-3 py-1.5 rounded-full bg-[#F4EEFB] text-xs font-bold text-[#6B3AA8]">
-                                {completedPhotos}/{TOTAL_PHOTOS}
-                            </div>
-
-                        </div>
-
-                        {/* CAMERA */}
-
-                        <div className="relative w-full h-50 md:h-80 overflow-hidden rounded-2xl bg-[#1F1133] aspect-video">
-
-                            <video
-                                ref={videoRef}
-                                autoPlay
-                                playsInline
-                                muted
-                                className="w-full h-full object-cover"
-                                style={{
-                                    transform: "scaleX(-1)",
-                                    filter:
-                                        filter === "mono"
-                                            ? "grayscale(100%)"
-                                            : filter === "sepia"
-                                                ? "sepia(100%)"
-                                                : filter === "vintage"
-                                                    ? "sepia(40%) contrast(110%) saturate(85%) brightness(105%)"
-                                                    : "none",
-                                }}
-                            />
-
-                            {countdown !== null && (
-                                <div className="absolute inset-0 bg-black/45 flex items-center justify-center">
-                                    <div className="w-28 h-28 rounded-full bg-white text-[#6B3AA8] flex items-center justify-center text-5xl font-extrabold animate-pulse">
-                                        {countdown}
-                                    </div>
-                                </div>
-                            )}
-
-                            {!cameraReady && (
-
-                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#1F1133] text-white">
-
-                                    <Camera
-                                        size={38}
-                                        className="mb-3 opacity-70"
-                                    />
-
-                                    <p className="text-sm opacity-80">
-                                        Menyiapkan kamera...
+                                    <p className="text-xs text-purple-900/50 mt-1">
+                                        Foto {activeSlot + 1} dari{" "}
+                                        {TOTAL_PHOTOS}
                                     </p>
 
                                 </div>
 
-                            )}
-
-                        </div>
-
-                        {/* PROGRESS */}
-
-                        <div className="mt-2">
-
-                            <div className="flex justify-between mb-2">
-
-                                <span className="text-xs font-bold text-[#3E2463]">
-                                    Progress Foto
-                                </span>
-
-                                <span className="text-xs text-purple-900/50">
-                                    {completedPhotos} /{" "}
-                                    {TOTAL_PHOTOS}
-                                </span>
+                                <div className="px-3 py-1.5 rounded-full bg-[#F4EEFB] text-xs font-bold text-[#6B3AA8]">
+                                    {completedPhotos}/{TOTAL_PHOTOS}
+                                </div>
 
                             </div>
 
-                            <div className="w-full h-2 bg-[#EADBF7] rounded-full overflow-hidden">
+                            {/* CAMERA */}
 
-                                <div
-                                    className="h-full bg-linear-to-r from-[#6B3AA8] to-[#9C51B6] rounded-full transition-all duration-300"
+                            <div className="relative w-full h-50 md:h-80 overflow-hidden rounded-2xl bg-[#1F1133] aspect-video">
+
+                                <video
+                                    ref={videoRef}
+                                    autoPlay
+                                    playsInline
+                                    muted
+                                    className="w-full h-full object-cover"
                                     style={{
-                                        width: `${(completedPhotos /
-                                            TOTAL_PHOTOS) *
-                                            100
-                                            }%`,
+                                        transform: "scaleX(-1)",
+                                        filter:
+                                            filter === "mono"
+                                                ? "grayscale(100%)"
+                                                : filter === "sepia"
+                                                    ? "sepia(100%)"
+                                                    : filter === "vintage"
+                                                        ? "sepia(40%) contrast(110%) saturate(85%) brightness(105%)"
+                                                        : "none",
                                     }}
                                 />
 
+                                {countdown !== null && (
+                                    <div className="absolute inset-0 bg-black/45 flex items-center justify-center">
+                                        <div className="w-28 h-28 rounded-full bg-white text-[#6B3AA8] flex items-center justify-center text-5xl font-extrabold animate-pulse">
+                                            {countdown}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {!cameraReady && (
+
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#1F1133] text-white">
+
+                                        <Camera
+                                            size={38}
+                                            className="mb-3 opacity-70"
+                                        />
+
+                                        <p className="text-sm opacity-80">
+                                            Menyiapkan kamera...
+                                        </p>
+
+                                    </div>
+
+                                )}
+
                             </div>
 
-                        </div>
+                            {/* PROGRESS */}
 
-                        <div className="mt-4 space-y-3">
-                            <div>
-                                <p className="text-xs font-bold text-[#3E2463] mb-2">Timer</p>
-                                <div className="flex gap-2 flex-wrap">
-                                    {[0, 3, 5, 10].map((t) => (
-                                        <button
-                                            key={t}
-                                            onClick={() => setTimer(t)}
-                                            className={`px-3 py-1 rounded-lg text-xs font-bold transition ${timer === t
-                                                ? "bg-[#6B3AA8] text-white"
-                                                : "bg-[#F4EEFB] text-[#3E2463]"
-                                                }`}
-                                        >
-                                            {t === 0 ? "Off" : `${t}s`}
-                                        </button>
-                                    ))}
+                            <div className="mt-2">
+
+                                <div className="flex justify-between mb-2">
+
+                                    <span className="text-xs font-bold text-[#3E2463]">
+                                        Progress Foto
+                                    </span>
+
+                                    <span className="text-xs text-purple-900/50">
+                                        {completedPhotos} /{" "}
+                                        {TOTAL_PHOTOS}
+                                    </span>
+
                                 </div>
-                            </div>
 
-                            <div>
-                                <p className="text-xs font-bold text-[#3E2463] mb-2">Filter Kamera</p>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {[
-                                        ["normal", "Normal"],
-                                        ["mono", "Monokrom"],
-                                        ["sepia", "Sepia"],
-                                        ["vintage", "Vintage"],
-                                    ].map(([value, label]) => (
-                                        <button
-                                            key={value}
-                                            onClick={() => setFilter(value as any)}
-                                            className={`py-2 rounded-lg text-xs font-bold transition ${filter === value
-                                                ? "bg-[#6B3AA8] text-white"
-                                                : "bg-[#F4EEFB] text-[#3E2463]"
-                                                }`}
-                                        >
-                                            {label}
-                                        </button>
-                                    ))}
+                                <div className="w-full h-2 bg-[#EADBF7] rounded-full overflow-hidden">
+
+                                    <div
+                                        className="h-full bg-linear-to-r from-[#6B3AA8] to-[#9C51B6] rounded-full transition-all duration-300"
+                                        style={{
+                                            width: `${(completedPhotos /
+                                                TOTAL_PHOTOS) *
+                                                100
+                                                }%`,
+                                        }}
+                                    />
+
                                 </div>
+
                             </div>
-                        </div>
 
-                        {/* SLOT BUTTONS */}
 
-                        <div className="grid grid-cols-3 gap-2 mt-5">
 
-                            {SLOTS.map(
-                                (_, index) => {
+                            {/* SLOT BUTTONS */}
 
-                                    const hasPhoto =
-                                        Boolean(
-                                            photos[index]
-                                        );
+                            <div className="grid grid-cols-3 gap-2 mt-5">
 
-                                    const isActive =
-                                        activeSlot ===
-                                        index;
+                                {SLOTS.map(
+                                    (_, index) => {
 
-                                    return (
-                                        <button
-                                            key={index}
-                                            onClick={() =>
-                                                selectSlot(
-                                                    index
-                                                )
-                                            }
-                                            className={`relative p-3 rounded-xl border-2 transition-all ${isActive
-                                                ? "border-[#6B3AA8] bg-[#F4EEFB]"
-                                                : "border-purple-100 bg-white hover:bg-[#F4EEFB]"
-                                                }`}
-                                        >
+                                        const hasPhoto =
+                                            Boolean(
+                                                photos[index]
+                                            );
 
-                                            <div className="text-xs font-bold text-[#3E2463]">
-                                                Foto{" "}
-                                                {index +
-                                                    1}
-                                            </div>
+                                        const isActive =
+                                            activeSlot ===
+                                            index;
 
-                                            <div className="text-[10px] mt-1 text-purple-900/50">
+                                        return (
+                                            <button
+                                                key={index}
+                                                onClick={() =>
+                                                    selectSlot(
+                                                        index
+                                                    )
+                                                }
+                                                className={`relative p-3 rounded-xl border-2 transition-all ${isActive
+                                                    ? "border-[#6B3AA8] bg-[#F4EEFB]"
+                                                    : "border-purple-100 bg-white hover:bg-[#F4EEFB]"
+                                                    }`}
+                                            >
 
-                                                {hasPhoto
-                                                    ? "Sudah diambil"
-                                                    : "Belum diambil"}
+                                                <div className="text-xs font-bold text-[#3E2463]">
+                                                    Foto{" "}
+                                                    {index +
+                                                        1}
+                                                </div>
 
-                                            </div>
+                                                <div className="text-[10px] mt-1 text-purple-900/50">
 
-                                            {hasPhoto && (
-                                                <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-[#6B3AA8] text-white flex items-center justify-center">
-
-                                                    <Check
-                                                        size={
-                                                            12
-                                                        }
-                                                    />
+                                                    {hasPhoto
+                                                        ? "Sudah diambil"
+                                                        : "Belum diambil"}
 
                                                 </div>
-                                            )}
 
-                                        </button>
-                                    );
+                                                {hasPhoto && (
+                                                    <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-[#6B3AA8] text-white flex items-center justify-center">
+
+                                                        <Check
+                                                            size={
+                                                                12
+                                                            }
+                                                        />
+
+                                                    </div>
+                                                )}
+
+                                            </button>
+                                        );
+                                    }
+                                )}
+
+                            </div>
+
+                            {/* CAPTURE */}
+
+                            <button
+                                onClick={capturePhoto}
+                                disabled={
+                                    !cameraReady ||
+                                    isProcessing
                                 }
-                            )}
+                                className="w-full mt-5 flex items-center justify-center gap-3 py-3.5 rounded-2xl bg-[#6B3AA8] text-white font-bold text-sm shadow-lg shadow-purple-200 hover:bg-[#3E2463] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+
+                                <Camera size={20} />
+
+                                {isProcessing
+                                    ? "Memproses..."
+                                    : photos[
+                                        activeSlot
+                                    ]
+                                        ? `Foto Ulang Foto ${activeSlot +
+                                        1
+                                        }`
+                                        : `Ambil Foto ${activeSlot +
+                                        1
+                                        }`}
+
+                            </button>
+
+                            <p className="text-center text-xs text-purple-900/40 mt-3">
+                                Klik nomor foto untuk
+                                memilih slot yang ingin
+                                diambil atau diulang.
+                            </p>
 
                         </div>
 
-                        {/* CAPTURE */}
+                        <div className="bg-white rounded-3xl mt-2 md:mt-4 shadow-xl border border-purple-100 p-3 sm:p-5">
+                            <div className=" space-y-3">
+                                <div>
+                                    <p className="text-xs font-bold text-[#3E2463] mb-2">Timer</p>
+                                    <div className="flex gap-2 flex-wrap">
+                                        {[0, 3, 5, 10].map((t) => (
+                                            <button
+                                                key={t}
+                                                onClick={() => setTimer(t)}
+                                                className={`px-3 py-1 rounded-lg text-xs font-bold transition ${timer === t
+                                                    ? "bg-[#6B3AA8] text-white"
+                                                    : "bg-[#F4EEFB] text-[#3E2463]"
+                                                    }`}
+                                            >
+                                                {t === 0 ? "Off" : `${t}s`}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
 
-                        <button
-                            onClick={capturePhoto}
-                            disabled={
-                                !cameraReady ||
-                                isProcessing
-                            }
-                            className="w-full mt-5 flex items-center justify-center gap-3 py-3.5 rounded-2xl bg-[#6B3AA8] text-white font-bold text-sm shadow-lg shadow-purple-200 hover:bg-[#3E2463] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-
-                            <Camera size={20} />
-
-                            {isProcessing
-                                ? "Memproses..."
-                                : photos[
-                                    activeSlot
-                                ]
-                                    ? `Foto Ulang Foto ${activeSlot +
-                                    1
-                                    }`
-                                    : `Ambil Foto ${activeSlot +
-                                    1
-                                    }`}
-
-                        </button>
-
-                        <p className="text-center text-xs text-purple-900/40 mt-3">
-                            Klik nomor foto untuk
-                            memilih slot yang ingin
-                            diambil atau diulang.
-                        </p>
-
+                                <div>
+                                    <p className="text-xs font-bold text-[#3E2463] mb-2">Filter Kamera</p>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {[
+                                            ["normal", "Normal"],
+                                            ["mono", "Monokrom"],
+                                            ["sepia", "Sepia"],
+                                            ["vintage", "Vintage"],
+                                        ].map(([value, label]) => (
+                                            <button
+                                                key={value}
+                                                onClick={() => setFilter(value as any)}
+                                                className={`py-2 rounded-lg text-xs font-bold transition ${filter === value
+                                                    ? "bg-[#6B3AA8] text-white"
+                                                    : "bg-[#F4EEFB] text-[#3E2463]"
+                                                    }`}
+                                            >
+                                                {label}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
 
                     {/* ==================================================
                         RESULT CARD
