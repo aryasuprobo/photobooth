@@ -43,6 +43,13 @@ export default function PhotoPage({
     const [cameraReady, setCameraReady] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
 
+    const [timer, setTimer] = useState(0);
+    const [countdown, setCountdown] = useState<number | null>(null);
+
+    const [filter, setFilter] = useState<
+        "normal" | "mono" | "sepia" | "vintage"
+    >("normal");
+
 
 
     // ==================================================
@@ -116,78 +123,67 @@ export default function PhotoPage({
         });
     }
 
+    function getCanvasFilter() {
+        switch (filter) {
+            case "mono":
+                return "grayscale(100%)";
+            case "sepia":
+                return "sepia(100%)";
+            case "vintage":
+                return "sepia(40%) contrast(110%) saturate(85%) brightness(105%)";
+            default:
+                return "none";
+        }
+    }
+
     // ==================================================
     // CAPTURE PHOTO
     // ==================================================
 
-    function capturePhoto() {
-        if (!videoRef.current) return;
-        if (!cameraReady) return;
-        if (isProcessing) return;
+    async function capturePhoto() {
+        if (!videoRef.current || !cameraReady || isProcessing) return;
+
+        if (timer > 0) {
+            setCountdown(timer);
+
+            for (let i = timer; i > 0; i--) {
+                setCountdown(i);
+                await new Promise((r) => setTimeout(r, 1000));
+            }
+
+            setCountdown(null);
+        }
 
         const video = videoRef.current;
 
-        if (
-            !video.videoWidth ||
-            !video.videoHeight
-        ) {
-            return;
-        }
+        if (!video.videoWidth || !video.videoHeight) return;
 
-        const tempCanvas =
-            document.createElement("canvas");
-
+        const tempCanvas = document.createElement("canvas");
         tempCanvas.width = video.videoWidth;
         tempCanvas.height = video.videoHeight;
 
-        const ctx =
-            tempCanvas.getContext("2d");
-
+        const ctx = tempCanvas.getContext("2d");
         if (!ctx) return;
 
-        // Mirror seperti tampilan kamera
-        ctx.translate(
-            tempCanvas.width,
-            0
-        );
-
+        // mirror
+        ctx.translate(tempCanvas.width, 0);
         ctx.scale(-1, 1);
 
-        ctx.drawImage(
-            video,
-            0,
-            0,
-            tempCanvas.width,
-            tempCanvas.height
-        );
+        // filter
+        ctx.filter = getCanvasFilter();
 
-        const dataUrl =
-            tempCanvas.toDataURL("image/png");
+        ctx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
 
-        // Masukkan foto ke slot aktif
-        const updatedPhotos = [...photos];
+        const dataUrl = tempCanvas.toDataURL("image/png");
 
-        updatedPhotos[activeSlot] = dataUrl;
+        const updated = [...photos];
+        updated[activeSlot] = dataUrl;
 
-        setPhotos(updatedPhotos);
+        setPhotos(updated);
+        composeFinalImage(updated);
 
-        // Langsung generate preview terbaru
-        composeFinalImage(updatedPhotos);
-
-        // Cari slot kosong berikutnya
-        const nextEmptySlot =
-            updatedPhotos.findIndex(
-                (photo) => photo === null
-            );
-
-        if (nextEmptySlot !== -1) {
-            setActiveSlot(nextEmptySlot);
-        } else {
-            // Semua sudah terisi
-            setActiveSlot(
-                activeSlot
-            );
-        }
+        const next = updated.findIndex((p) => p === null);
+        if (next !== -1) setActiveSlot(next);
     }
 
     // ==================================================
@@ -476,13 +472,13 @@ export default function PhotoPage({
                     CAMERA KIRI | HASIL KANAN
                 ================================================== */}
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-start">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 items-start">
 
                     {/* ==================================================
                         CAMERA CARD
                     ================================================== */}
 
-                    <div className="bg-white rounded-3xl shadow-xl border border-purple-100 p-5 sm:p-5">
+                    <div className="bg-white rounded-3xl shadow-xl border border-purple-100 p-3 sm:p-5">
 
                         <div className="flex items-center justify-between mb-2">
 
@@ -516,10 +512,25 @@ export default function PhotoPage({
                                 muted
                                 className="w-full h-full object-cover"
                                 style={{
-                                    transform:
-                                        "scaleX(-1)",
+                                    transform: "scaleX(-1)",
+                                    filter:
+                                        filter === "mono"
+                                            ? "grayscale(100%)"
+                                            : filter === "sepia"
+                                                ? "sepia(100%)"
+                                                : filter === "vintage"
+                                                    ? "sepia(40%) contrast(110%) saturate(85%) brightness(105%)"
+                                                    : "none",
                                 }}
                             />
+
+                            {countdown !== null && (
+                                <div className="absolute inset-0 bg-black/45 flex items-center justify-center">
+                                    <div className="w-28 h-28 rounded-full bg-white text-[#6B3AA8] flex items-center justify-center text-5xl font-extrabold animate-pulse">
+                                        {countdown}
+                                    </div>
+                                </div>
+                            )}
 
                             {!cameraReady && (
 
@@ -571,6 +582,49 @@ export default function PhotoPage({
 
                             </div>
 
+                        </div>
+
+                        <div className="mt-4 space-y-3">
+                            <div>
+                                <p className="text-xs font-bold text-[#3E2463] mb-2">Timer</p>
+                                <div className="flex gap-2 flex-wrap">
+                                    {[0, 3, 5, 10].map((t) => (
+                                        <button
+                                            key={t}
+                                            onClick={() => setTimer(t)}
+                                            className={`px-3 py-1 rounded-lg text-xs font-bold transition ${timer === t
+                                                ? "bg-[#6B3AA8] text-white"
+                                                : "bg-[#F4EEFB] text-[#3E2463]"
+                                                }`}
+                                        >
+                                            {t === 0 ? "Off" : `${t}s`}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div>
+                                <p className="text-xs font-bold text-[#3E2463] mb-2">Filter Kamera</p>
+                                <div className="grid grid-cols-2 gap-2">
+                                    {[
+                                        ["normal", "Normal"],
+                                        ["mono", "Monokrom"],
+                                        ["sepia", "Sepia"],
+                                        ["vintage", "Vintage"],
+                                    ].map(([value, label]) => (
+                                        <button
+                                            key={value}
+                                            onClick={() => setFilter(value as any)}
+                                            className={`py-2 rounded-lg text-xs font-bold transition ${filter === value
+                                                ? "bg-[#6B3AA8] text-white"
+                                                : "bg-[#F4EEFB] text-[#3E2463]"
+                                                }`}
+                                        >
+                                            {label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
 
                         {/* SLOT BUTTONS */}
